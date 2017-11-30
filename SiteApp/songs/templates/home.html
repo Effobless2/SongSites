@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block main %}
+  <ul>
+    {% for x in names %}
+    <li>{{ x }}</li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('books') }}">Les Livres</a>
+{% endblock %}
