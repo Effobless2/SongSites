@@ -10,7 +10,7 @@ class Author(db.Model):
         return "<Author (%d) %s>" % (self.id, self.name)
 
 
-class Book(db.Model):
+class Music(db.Model):
     id        = db.Column(db.Integer, primary_key=True)
     price     = db.Column(db.Float)
     title     = db.Column(db.String(100))
@@ -18,13 +18,13 @@ class Book(db.Model):
     img       = db.Column(db.String(100))
     author_id = db.Column(db.Integer, db.ForeignKey("author.id"))
     author    = db.relationship("Author",
-                                backref=db.backref("books", lazy="dynamic"))
+                                backref=db.backref("music", lazy="dynamic"))
     def __repr(self):
-        return "<Book (%d) %s>" % (self.id, self.title)
+        return "<Music (%d) %s>" % (self.id, self.title)
 
 
 def get_sample():
-    return Book.query.limit(10).all()
+    return Music.query.limit(10).all()
 
 def get_authors():
     return Author.query.limit(10).all()

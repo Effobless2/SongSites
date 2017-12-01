@@ -9,16 +9,16 @@ def loaddb(filename):
 
     #chargement du jeu de notre base de données
     import yaml
-    books = yaml.load(open(filename))
+    musics = yaml.load(open(filename))
 
 
     #import des modèles
-    from .models import Author, Book
+    from .models import Author, Music
 
     #première passe : créationdes autheurs
     authors = {}
-    for b in books:
-        a = b["author"]
+    for m in musics:
+        a = m["author"]
         if a not in authors :
             o = Author(name=a)
             db.session.add(o)
@@ -26,12 +26,12 @@ def loaddb(filename):
     db.session.commit()
 
     #deuxième passe : création de tous les Livres
-    for b in books:
-        a = authors[b["author"]]
-        o = Book(price     = b["price"],
-                 title     = b["title"],
-                 url       = b["url"]  ,
-                 img       = b["img"]  ,
-                 author_id = a.id      )
+    for m in musics:
+        a = authors[m["author"]]
+        o = Music(price     = m["price"],
+                 title      = m["title"],
+                 url        = m["url"]  ,
+                 img        = m["img"]  ,
+                 author_id  = a.id      )
         db.session.add(o)
     db.session.commit()

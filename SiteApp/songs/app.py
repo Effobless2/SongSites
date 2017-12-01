@@ -12,4 +12,10 @@ def mkpath(p):
 app = Flask(__name__)
 app.debug = True
 
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    'sqlite:///'+mkpath('../songs.db'))
+
+db = SQLAlchemy(app)
+
+
 manager = Manager(app)

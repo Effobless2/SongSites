@@ -9,15 +9,15 @@ def home():
         title="Hello World!",
         names = ["Pierre", "Paul", "Corinne"])
 
-@app.route("/books/")
-def books():
+@app.route("/musics")
+def musics():
     return render_template(
-        "books.html",
-        title = "Les Livres",
-        books = get_sample()
+        "musics.html",
+        title = "Les musiques",
+        musics = get_sample()
     )
 
-@app.route("/authors/")
+@app.route("/authors")
 def authors():
     return render_template(
         "authors.html",
