@@ -48,9 +48,9 @@ def edit_author(id):
     a = get_author(id)
     f = AuthorForm(id = a.id, name = a.name)
     return render_template(
-                "edit-author.html",
-                author = a,
-                form = f)
+        "edit-author.html",
+        author = a,
+        form = f)
 
 @app.route("/save/author/", methods=("POST",))
 def save_author():
@@ -64,11 +64,27 @@ def save_author():
         return redirect(url_for('one_author', a = a.id))
     a = get_author(int(f.id.data))
     return render_template(
-            "edit-author.html",
-            author = a,
-            form = f)
+        "edit-author.html",
+        author = a,
+        form = f)
 
+@app.route("/new/author/")
+def new_author():
+    f = AuthorForm(id = None, name = None)
+    return render_template(
+        "create-author.html",
+        form = f)
 
-
+@app.route("/new/author/saving", methods=("POST",))
+def save_new_author():
+    f = AuthorForm()
+    if f.validate_on_submit():
+        o = Author(name=f.name.data)
+        db.session.add(o)
+        db.session.commit()
+        return redirect(url_for('one_author', a = o.id))
+    return render_template(
+        "create-author.html",
+        form = f)
 
 Bootstrap(app)
