@@ -1,6 +1,17 @@
 from .app import app
 from flask import render_template
-from .models import get_sample, get_authors
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from .models import get_sample, get_authors, get_author
+from wtforms import StringField, HiddenField
+from wtforms.validators import DataRequired
+
+app.config['BOOTSTRAP_SERVE_LOCAL'] = True
+
+class AuthorForm(FlaskForm):
+    id = HiddenField('id')
+    name = StringField('Nom', validators = [DataRequired()])
+
 
 @app.route("/")
 def home():
@@ -22,12 +33,18 @@ def authors():
     return render_template(
         "authors.html",
         title = "Les Autheurs",
-        authors = get_authors()
-    )
+        authors = get_authors())
+
+@app.route("/edit/author/<int:id>")
+def edit_author(id):
+    a = get_author(id)
+    f = AuthorForm(id = a, name = a.name)
+    return render_template(
+                "edit-author.html",
+                author = a,
+                form = f)
 
 
-from flask_bootstrap import Bootstrap
 
-app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 
 Bootstrap(app)

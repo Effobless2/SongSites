@@ -15,6 +15,8 @@ app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     'sqlite:///'+mkpath('../songs.db'))
 
+app.config['SECRET_KEY'] = "bcc090e2-26b2-4c16-84ab-e766cc644320"
+
 db = SQLAlchemy(app)
 
 

@@ -29,7 +29,8 @@ def get_sample():
 def get_authors():
     return Author.query.limit(10).all()
 
-
+def get_author(id):
+    return Author.query.get(id)
 # print("Version YAML")
 
 # import yaml, os.path
