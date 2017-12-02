@@ -1,9 +1,13 @@
 print("Version database")
 
 from .app import db
+from flask-login import UserMixin
 
 
 class Author(db.Model):
+    """
+    Create an instance of author
+    """
     id   = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     def __repr__(self):
@@ -11,6 +15,9 @@ class Author(db.Model):
 
 
 class Music(db.Model):
+    """
+    Create an instance of Music
+    """
     id        = db.Column(db.Integer, primary_key=True)
     price     = db.Column(db.Float)
     title     = db.Column(db.String(100))
@@ -22,6 +29,12 @@ class Music(db.Model):
     def __repr(self):
         return "<Music (%d) %s>" % (self.id, self.title)
 
+class User(db.Model, UserMixin):
+    username = db.Column(db.String(50), primary_key=True)
+    password = db.Column(db.String(50))
+
+    def get_id(self):
+        return self.username
 
 def get_sample():
     return Music.query.limit(10).all()
