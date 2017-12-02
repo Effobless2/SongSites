@@ -1,7 +1,7 @@
 print("Version database")
 
 from .app import db
-from flask-login import UserMixin
+from flask_login import UserMixin
 
 
 class Author(db.Model):
