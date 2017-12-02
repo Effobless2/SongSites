@@ -43,3 +43,17 @@ def syncdb():
     Creates all missing tables
     """
     db.create_all()
+
+
+@manager.command
+def newuser(username, password):
+    """
+    Adds a new user
+    """
+    from .models import User
+    from hashlib import sha256
+    m = sha256()
+    m.update(password.encode())
+    u = User(username = username, password = m.hexdigest())
+    db.session.add(u)
+    db.session.commit()
