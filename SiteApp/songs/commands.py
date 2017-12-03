@@ -57,3 +57,18 @@ def newuser(username, password):
     u = User(username = username, password = m.hexdigest())
     db.session.add(u)
     db.session.commit()
+
+@manager.command
+def passwd(username,newPassword):
+    """
+    Change the password of username in database
+    if he exists in
+    """
+    from .app import db
+    from .models import User
+    u = User.query.get(username)
+    if u!=None:
+        u.password = newPassword
+        db.session.commit()
+    else:
+        return "User doesn't exist. Verify your username and try again."
