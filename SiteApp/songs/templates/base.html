@@ -28,6 +28,18 @@
            <li><a href="{{ url_for('authors') }}">Autheurs</a></li>
            <li><a href="{{ url_for('new_author') }}">Ajouter un auteur</a></li>
          </ul>
+         <ul class = "nav navbar-nav navbar-right">
+           {% if current_user.is_authenticated %}
+           <li><a>{{ current_user.username }}</a></li>
+           <li><a href = "{{ url_for('logout') }}">
+             <span class = "glyphicon glyphicon-log-out" title = "Logout">
+             </span></a></li>
+           {% else %}
+           <li><a href = "{{ url_for('login') }}">
+             <span class = "glyphicon glyphicon-log-in" title = "Login">
+             </span></a></li>
+           {% endif %}
+         </ul>
        </div><!--/.nav-collapse -->
      </div>
    </nav>

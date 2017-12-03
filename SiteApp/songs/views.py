@@ -1,12 +1,26 @@
 from .app import app, db
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, request
 from flask_bootstrap import Bootstrap
+from flask_login import current_user, login_user, logout_user
 from flask_wtf import FlaskForm
-from .models import Author, get_sample, get_authors, get_author
-from wtforms import StringField, HiddenField
+from hashlib import sha256
+from .models import Author, get_sample, get_authors, get_author, User
+from wtforms import StringField, HiddenField, PasswordField
 from wtforms.validators import DataRequired
 
-app.config['BOOTSTRAP_SERVE_LOCAL'] = True
+
+class LoginForm(FlaskForm):
+    username = StringField("Username")
+    password = PasswordField("Password")
+
+    def get_authentificated_user(self):
+        user = User.query.get(self.username.data)
+        if user is None:
+            return None
+        m = sha256()
+        m.update(self.password.data.encode())
+        passwd = m.hexdigest()
+        return user if passwd == user.password else None
 
 class AuthorForm(FlaskForm):
     id = HiddenField('id')
@@ -86,5 +100,22 @@ def save_new_author():
     return render_template(
         "create-author.html",
         form = f)
+
+@app.route("/login/", methods=("GET","POST",))
+def login():
+    f = LoginForm()
+    if f.validate_on_submit():
+        user = f.get_authentificated_user()
+        if user:
+            login_user(user)
+            return redirect(url_for("home"))
+    return render_template(
+        "login.html",
+        form = f)
+
+@app.route("/logout/")
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 Bootstrap(app)

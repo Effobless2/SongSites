@@ -18,6 +18,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SECRET_KEY'] = "bcc090e2-26b2-4c16-84ab-e766cc644320"
 
+app.config['BOOTSTRAP_SERVE_LOCAL'] = True
+
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)

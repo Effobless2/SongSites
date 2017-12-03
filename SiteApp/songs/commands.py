@@ -66,9 +66,12 @@ def passwd(username,newPassword):
     """
     from .app import db
     from .models import User
+    from hashlib import sha256
     u = User.query.get(username)
     if u!=None:
-        u.password = newPassword
+        m = sha256()
+        m.update(newPassword.encode())
+        u.password = m.hexdigest()
         db.session.commit()
     else:
         return "User doesn't exist. Verify your username and try again."
