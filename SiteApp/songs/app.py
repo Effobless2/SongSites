@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 import os.path
@@ -19,5 +20,6 @@ app.config['SECRET_KEY'] = "bcc090e2-26b2-4c16-84ab-e766cc644320"
 
 db = SQLAlchemy(app)
 
+login_manager = LoginManager(app)
 
 manager = Manager(app)
