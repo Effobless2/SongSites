@@ -27,6 +27,14 @@ class AuthorForm(FlaskForm):
     id = HiddenField('id')
     name = StringField('Nom', validators = [DataRequired()])
 
+class UserForm(FlaskForm):
+    id = HiddenField("id")
+    username = StringField("Username")
+    password = PasswordField("Password")
+    confirm  = PasswordField("Confirm Password")
+
+    def passwordConfirmed(self):
+        return self.password.data == self.confirm.data
 
 @app.route("/")
 def home():
@@ -122,5 +130,27 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("home"))
+
+@app.route("/new-profile/")
+def new_profile():
+    f = UserForm()
+    return render_template(
+        "new-profile.html",
+        form = f)
+
+@app.route("/new/profile/saving", methods=("POST",))
+def save_new_profile():
+    f = UserForm()
+    if f.validate_on_submit() and f.passwordConfirmed() and (User.query.get(f.username.data) == None):
+        from hashlib import sha256
+        m = sha256()
+        m.update(f.password.data.encode())
+        u = User(username = f.username.data, password = m.hexdigest())
+        db.session.add(u)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template(
+        "new-profile.html",
+        form = f)
 
 Bootstrap(app)
