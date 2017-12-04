@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% block main %}
-  <ul>
-    {% for x in names %}
-    <li>{{ x }}</li>
-    {% endfor %}
-  </ul>
-  <a href="{{ url_for('musics') }}">Ta playlist wesh</a>
+
+  {% if current_user.is_authenticated %}
+  <h1> Bonjour <i>{{ current_user.username }}</i>, Bienvenue sur votre application.</h1>
+
+  {% else %}
+
+  <h1> Bonjour, Bienvenue sur l'application d'Effobless. </br>
+    Si vous souhaitez utiliser l'application, Veuillez vous
+    <a href = "{{ url_for('login') }}">connecter</a> </br>
+    ou bien créer un compte.</h1>
+
+  {% endif %}
+
 {% endblock %}
