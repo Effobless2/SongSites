@@ -51,6 +51,8 @@ def newuser(username, password):
     Adds a new user
     """
     from .models import User
+    if User.query.get(username)!=None:
+        return "User already exist"
     from hashlib import sha256
     m = sha256()
     m.update(password.encode())
