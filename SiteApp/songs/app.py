@@ -24,4 +24,6 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 
+login_manager.login_view = "login"
+
 manager = Manager(app)

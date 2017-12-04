@@ -1,7 +1,7 @@
 from .app import app, db
 from flask import render_template, url_for, redirect, request
 from flask_bootstrap import Bootstrap
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
 from .models import Author, get_sample, get_authors, get_author, User
@@ -12,6 +12,7 @@ from wtforms.validators import DataRequired
 class LoginForm(FlaskForm):
     username = StringField("Username")
     password = PasswordField("Password")
+    next = HiddenField()
 
     def get_authentificated_user(self):
         user = User.query.get(self.username.data)
@@ -49,15 +50,16 @@ def authors():
         title = "Les Autheurs",
         authors = get_authors())
 
-@app.route("/one-author/<int:a>")
-def one_author(a):
-    author = get_author(a)
+@app.route("/one-author/<int:id>")
+def one_author(id):
+    author = get_author(id)
     return render_template(
         "one-author.html",
         author = author)
 
 
 @app.route("/edit/author/<int:id>")
+@login_required
 def edit_author(id):
     a = get_author(id)
     f = AuthorForm(id = a.id, name = a.name)
@@ -75,11 +77,11 @@ def save_author():
         a  = get_author(id)
         a.name = f.name.data
         db.session.commit()
-        return redirect(url_for('one_author', a = a.id))
+        return redirect(url_for('one_author', id = a.id))
     a = get_author(int(f.id.data))
     return render_template(
         "edit-author.html",
-        author = a,
+        author = id,
         form = f)
 
 @app.route("/new/author/")
@@ -104,11 +106,14 @@ def save_new_author():
 @app.route("/login/", methods=("GET","POST",))
 def login():
     f = LoginForm()
-    if f.validate_on_submit():
+    if not f.is_submitted():
+        f.next.data = request.args.get("next")
+    elif f.validate_on_submit():
         user = f.get_authentificated_user()
         if user:
             login_user(user)
-            return redirect(url_for("home"))
+            next = f.next.data or url_for("home")
+            return redirect(next)
     return render_template(
         "login.html",
         form = f)

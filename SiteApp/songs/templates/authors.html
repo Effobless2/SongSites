@@ -2,7 +2,7 @@
 {% block main %}
 <ul>
   {% for a in authors %}
-  <li><a href="{{ url_for('edit_author', id= a.id ) }}">{{ a.name }}</a></li>
+  <li><a href="{{ url_for('one_author', id= a.id ) }}">{{ a.name }}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}
