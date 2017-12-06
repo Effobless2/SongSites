@@ -106,7 +106,7 @@ def save_new_author():
         o = Author(name=f.name.data)
         db.session.add(o)
         db.session.commit()
-        return redirect(url_for('one_author', a = o.id))
+        return redirect(url_for('one_author', id = o.id))
     return render_template(
         "create-author.html",
         form = f)
