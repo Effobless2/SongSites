@@ -4,10 +4,10 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User
+from .models import Author, get_sample, get_authors, get_author, User, Music
 from wtforms import StringField, HiddenField, PasswordField
 from wtforms.validators import DataRequired
-
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 class LoginForm(FlaskForm):
     username = StringField("Username")
@@ -35,6 +35,11 @@ class UserForm(FlaskForm):
 
     def passwordConfirmed(self):
         return self.password.data == self.confirm.data
+
+class MusicForm(FlaskForm):
+    id = HiddenField("id")
+    musicName = StringField("Nom de votre musique")
+    author = QuerySelectField("Autheur",query_factory = lambda : Author.query.all())
 
 @app.route("/")
 def home():
@@ -131,7 +136,7 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
-@app.route("/new-profile/")
+@app.route("/new/profile/")
 def new_profile():
     f = UserForm()
     return render_template(
@@ -152,5 +157,25 @@ def save_new_profile():
     return render_template(
         "new-profile.html",
         form = f)
+
+@app.route("/new/music/")
+@login_required
+def new_music():
+    f = MusicForm()
+    return render_template(
+        "new-music.html",
+        form = f)
+
+@app.route("/new/music/saving", methods = ("POST",))
+@login_required
+def new_music_saving():
+    f = MusicForm()
+    if f.validate_on_submit():
+        m = Music(title = f.musicName.data, author_id = f.author.data.id)
+        db.session.add(m)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template(
+        "new-music.html")
 
 Bootstrap(app)

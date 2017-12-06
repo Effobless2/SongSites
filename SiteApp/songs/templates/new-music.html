@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block main %}
+<h1> Création d'une Musique </h1>
+<form role = "form" method = "POST"
+                    action = "{{ url_for('new_music_saving') }}">
+  {{ form.hidden_tag() }}
+  <div class =
+       {% if form.musicName.errors or form.author.errors %}
+       "form-creation has-errors"
+       {% else %}
+       "form-creation"
+       {% endif %}
+       >
+    {{ form.musicName.label }}
+    {{ form.musicName(size = 20,
+                     class_ = "form-control") }}
+    </br>
+    {{ form.author.label }}
+    {{ form.author(class_ = "form_control") }}
+
+  </div>
+  {% if form.musicName.errors %}
+  <ul class = "list-group">
+    {% for e in form.musicName.errors %}
+    <li class = "list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  </ul>
+  {% elif form.author.errors %}
+  <ul class = "list-group">
+    {% for e in form.author.errors %}
+    <li class = "list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  {% endif %}
+  </ul>
+  <input class = "btn btn-default"
+         type  = "submit"
+         value = "Créer">
+</form>
+{% endblock %}

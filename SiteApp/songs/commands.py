@@ -28,11 +28,9 @@ def loaddb(filename):
     #deuxième passe : création de tous les Livres
     for m in musics:
         a = authors[m["author"]]
-        o = Music(price     = m["price"],
-                 title      = m["title"],
-                 url        = m["url"]  ,
-                 img        = m["img"]  ,
-                 author_id  = a.id      )
+        o = Music(title      = m["title"],
+                  img        = m["img"]  ,
+                  author_id  = a.id      )
         db.session.add(o)
     db.session.commit()
 

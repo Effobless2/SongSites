@@ -22,9 +22,7 @@ class Music(db.Model):
     Create an instance of Music
     """
     id        = db.Column(db.Integer, primary_key=True)
-    price     = db.Column(db.Float)
     title     = db.Column(db.String(100))
-    url       = db.Column(db.String(100))
     img       = db.Column(db.String(100))
     author_id = db.Column(db.Integer, db.ForeignKey("author.id"))
     author    = db.relationship("Author",
