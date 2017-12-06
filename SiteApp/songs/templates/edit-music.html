@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Edition d'une musique</h1>
+<form role="form" method="POST"
+                  action="{{ url_for('save_music') }}">
+  {{ form.hidden_tag() }}
+  <div class=
+       {% if form.musicName.errors or form.author.errors%}
+       "form-group has-errors"
+       {% else %}
+       "form-group"
+       {% endif %}
+       >
+    {{ form.musicName.label }}
+    {{ form.musicName(size = 20,
+                     class_ = "form-control") }}
+
+    </br>
+    {{ form.author.label }}
+    {{ form.author(class_ = "form-control") }}
+  </div>
+  {% if form.musicName.errors %}
+  <ul class = "list-group">
+    {% for e in form.musicName.errors %}
+    <li class="list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if form.author.errors %}
+  <ul class = "list-group">
+    {% for e in form.author.errors %}
+    <li class="list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <input class = "btn btn-default"
+          type ="submit"
+          value = "Enregistrer">
+</form>
+
+{% endblock %}

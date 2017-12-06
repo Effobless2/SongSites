@@ -45,6 +45,9 @@ def get_authors():
 
 def get_author(id):
     return Author.query.get(id)
+
+def get_music(id):
+    return Music.query.get(id)
 # print("Version YAML")
 
 # import yaml, os.path

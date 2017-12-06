@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music
+from .models import Author, get_sample, get_authors, get_author, User, Music, get_music
 from wtforms import StringField, HiddenField, PasswordField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -186,5 +186,32 @@ def one_music(id):
         "one-music.html",
         music = m,
         author = a)
+
+@app.route("/edit/music/<int:id>")
+@login_required
+def edit_music(id):
+    m = Music.query.get(id)
+    f = MusicForm(id= id, musicName = m.title, author = Author.query.get(m.author_id))
+    return render_template(
+        "edit-music.html",
+        music = m,
+        form = f)
+
+@app.route("/save/music/", methods = ("POST",))
+def save_music():
+    f = MusicForm()
+    if f.validate_on_submit():
+        id = int(f.id.data)
+        m = get_music(id)
+        m.title = f.musicName.data
+        m.author_id = f.author.data.id
+        db.session.commit()
+        return redirect(url_for('one_music', id = m.id))
+    m = get_music(int(f.id.data))
+    return render_template(
+        "edit-music.html",
+        music = m,
+        form = f)
+
 
 Bootstrap(app)
