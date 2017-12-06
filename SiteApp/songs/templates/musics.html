@@ -2,7 +2,7 @@
 {% block main %}
   <ul>
     {% for music in musics %}
-    <li>{{ music.title }}</li>
+    <a href= "{{ url_for('one_music', id = music.id) }}">{{ music.title }}</li>
     <img src = "{{url_for('static', filename = 'images/'+music.img) }}"/>
     {% endfor %}
   </ul>

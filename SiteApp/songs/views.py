@@ -178,4 +178,13 @@ def new_music_saving():
     return render_template(
         "new-music.html")
 
+@app.route("/one-music/<int:id>")
+def one_music(id):
+    m = Music.query.get(id)
+    a = Author.query.get(m.author_id)
+    return render_template(
+        "one-music.html",
+        music = m,
+        author = a)
+
 Bootstrap(app)
