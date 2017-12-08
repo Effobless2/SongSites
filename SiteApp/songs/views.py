@@ -98,6 +98,7 @@ def save_author():
         form = f)
 
 @app.route("/new/author/")
+@login_required
 def new_author():
     f = AuthorForm(id = None, name = None)
     return render_template(
