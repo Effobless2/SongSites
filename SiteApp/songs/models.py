@@ -27,7 +27,7 @@ class Music(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("author.id"))
     author    = db.relationship("Author",
                                 backref=db.backref("music", lazy="dynamic"))
-    def __repr(self):
+    def __repr__(self):
         return "<Music (%d) %s>" % (self.id, self.title)
 
 class User(db.Model, UserMixin):
@@ -37,8 +37,21 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.username
 
+association_Playlist_Music = db.Table("association_Playlist_Music",
+                             db.metadata,
+                             db.Column("music", db.Integer, db.ForeignKey("music.id"), primary_key=True),
+                             db.Column("playlist", db.Integer, db.ForeignKey("playlist.id"), primary_key=True))
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    img = db.Column(db.String(100))
+    musiclist = db.relationship("Music",
+                             secondary= association_Playlist_Music, lazy="dynamic",
+                             backref = db.backref("musics", lazy=True))
+
 def get_sample():
-    return Music.query.limit(10).all()
+    return Music.query.all()
 
 def get_authors():
     return Author.query.limit(10).all()

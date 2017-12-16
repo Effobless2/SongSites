@@ -28,6 +28,7 @@
            <li><a href="{{ url_for('authors') }}">Autheurs</a></li>
            <li><a href="{{ url_for('new_author') }}">Ajouter un auteur</a></li>
            <li><a href="{{ url_for('new_music') }}">Ajouter une musique</a></li>
+           <li><a href="{{ url_for('new_playlist') }}">Ajouter une playlist</a></li>
          </ul>
          <ul class = "nav navbar-nav navbar-right">
            {% if current_user.is_authenticated %}

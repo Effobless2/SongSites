@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Création de playlist</h1>
+<form role = "form" method = "POST"
+                    action = "{{ url_for('new_playlist_saving') }}">
+
+  {{ form.hidden_tag() }}
+  <div class =
+       {% if form.name.errors or form.musics.errors%}
+       "form-creation has-errors"
+       {% else %}
+       "form-creation"
+       {% endif %}
+       >
+
+    {{ form.name.label }}
+    {{ form.name(size = 20,
+                     class_ = "form-control") }}
+
+    </br>
+    <div class = "musics">
+      <ul>
+        {% for tune in form.musics %}
+          <input type = "checkbox" name= "musiclist" value={{tune.id}}>
+          <label for="id_{{tune.id}}">{{tune}}</label> </br>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% if form.name.errors %}
+<ul class = "list-group">
+  {% for e in form.name.errors %}
+  <li class = "list-group-item list-group-item-danger">{{ e }}</li>
+  {% endfor %}
+</ul>
+{% elif form.musics.errors %}
+<ul class = "list-group">
+  {% for e in form.musics.errors %}
+  <li class = "list-group-item list-group-item-danger">{{ e }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+<input class = "btn btn-default"
+       type  = "submit"
+       value = "Créer">
+</form>
+{% endblock %}

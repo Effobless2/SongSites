@@ -4,8 +4,8 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music, get_music
-from wtforms import StringField, HiddenField, PasswordField
+from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist
+from wtforms import StringField, HiddenField, PasswordField, widgets, SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
@@ -40,6 +40,17 @@ class MusicForm(FlaskForm):
     id = HiddenField("id")
     musicName = StringField("Nom de votre musique")
     author = QuerySelectField("Autheur",query_factory = lambda : Author.query.all())
+
+# class MultiCheckboxField(SelectMultipleField):
+#     widget = widgets.ListWidget(prefix_label=False)
+#     option_widget = widgets.CheckboxInput()
+
+class PlaylistForm(FlaskForm):
+    id = HiddenField("id")
+    name = StringField("Nom de votre playlist")
+    musics = get_sample()
+    # musics = MultiCheckboxField("Sélectionnez vos chansons :", choices = [(x,x.__repr__) for x in base])
+
 
 @app.route("/")
 def home():
@@ -212,6 +223,29 @@ def save_music():
     return render_template(
         "edit-music.html",
         music = m,
+        form = f)
+
+@app.route("/new/playlist/")
+@login_required
+def new_playlist():
+    f = PlaylistForm()
+    return render_template(
+        "new-playlist.html",
+        form = f)
+
+@app.route("/new/playlist/saving/", methods = ("POST",))
+def new_playlist_saving():
+    f = PlaylistForm()
+    if f.validate_on_submit():
+        p = Playlist(name = f.name.data)
+        for music in request.form.getlist("musiclist"):
+            m = get_music(music)
+            p.musiclist.append(m)
+        db.session.add(p)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template(
+        "new-playlist.html",
         form = f)
 
 
