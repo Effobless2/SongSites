@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist
+from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists
 from wtforms import StringField, HiddenField, PasswordField, widgets, SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -248,5 +248,11 @@ def new_playlist_saving():
         "new-playlist.html",
         form = f)
 
+@app.route("/playlists/")
+def playlists():
+    return render_template(
+        "playlists.html",
+        title = "Les Playlists",
+        playlists = get_playlists())
 
 Bootstrap(app)

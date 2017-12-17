@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<ul>
+  {% for play in  playlists %}
+  <li>
+    <a href = "#">{{ play.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
