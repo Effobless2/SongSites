@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Votre playlist</h1>
+<h2> Nom : {{playlist.name}}</h2>
+<h2> Liste des musiques </h2>
+<ul>
+  {% for music in playlist.getMusicList() %}
+  <li><a href = "{{ url_for('one_music', id = music.id) }}">{{music}}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

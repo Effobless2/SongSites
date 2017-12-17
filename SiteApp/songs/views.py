@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists
+from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists, get_playlist
 from wtforms import StringField, HiddenField, PasswordField, widgets, SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -254,5 +254,13 @@ def playlists():
         "playlists.html",
         title = "Les Playlists",
         playlists = get_playlists())
+
+@app.route("/one-playlist/<int:id>")
+def one_playlist(id):
+    p = get_playlist(id)
+    return render_template(
+        "one-playlist.html",
+        playlist = p)
+
 
 Bootstrap(app)

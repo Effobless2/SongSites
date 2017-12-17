@@ -3,7 +3,7 @@
 <ul>
   {% for play in  playlists %}
   <li>
-    <a href = "#">{{ play.name }}</a>
+    <a href = "{{ url_for('one_playlist', id = play.id) }}">{{ play.name }}</a>
   </li>
   {% endfor %}
 </ul>

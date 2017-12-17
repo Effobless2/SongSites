@@ -49,6 +49,8 @@ class Playlist(db.Model):
     musiclist = db.relationship("Music",
                              secondary= association_Playlist_Music, lazy="dynamic",
                              backref = db.backref("musics", lazy=True))
+    def getMusicList(self):
+        return self.musiclist
 
 def get_sample():
     return Music.query.all()
@@ -64,6 +66,9 @@ def get_music(id):
 
 def get_playlists():
     return Playlist.query.all()
+
+def get_playlist(id):
+    return Playlist.query.get(id)
 
 # print("Version YAML")
 
