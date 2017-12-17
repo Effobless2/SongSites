@@ -262,5 +262,35 @@ def one_playlist(id):
         "one-playlist.html",
         playlist = p)
 
+@app.route("/edit/playlist/<int:id>")
+@login_required
+def edit_playlist(id):
+    p = get_playlist(id)
+    f = PlaylistForm(id = id, name = p.name)
+    musiclist = []
+    for music in p.getMusicList():
+        musiclist.append(music.id)
+    return render_template(
+        "edit-playlist.html",
+        form = f,
+        playlist = p,
+        musiclist = musiclist)
+
+@app.route("/save/playlist/", methods=("POST",))
+def save_playlist():
+    f=PlaylistForm()
+    if f.validate_on_submit():
+        playlist = get_playlist(f.id.data)
+        playlist.name = f.name.data
+        for tune in playlist.getMusicList():
+            if tune.id not in request.form.getlist('musiclist'):
+                playlist.musiclist.remove(tune)
+        for tune in request.form.getlist("musiclist"):
+            m = get_music(tune)
+            if m not in playlist.getMusicList():
+                playlist.musiclist.append(m)
+        db.session.commit()
+        return redirect(url_for("one_playlist", id = playlist.id))
+    return redirect(url_for("edit_playlist", id = f.id.data))
 
 Bootstrap(app)

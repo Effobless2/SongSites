@@ -8,4 +8,5 @@
   <li><a href = "{{ url_for('one_music', id = music.id) }}">{{music}}</a></li>
   {% endfor %}
 </ul>
+<p><a href = "{{url_for('edit_playlist', id = playlist.id)}}">Edit</a></p>
 {% endblock %}
