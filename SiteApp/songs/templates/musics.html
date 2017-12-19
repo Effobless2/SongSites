@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block main %}
+<h1> Vos musiques</h1>
+  <aside>
+    {% for i in range(numberOfPages) %}
+    <a href = "{{ url_for('musics', page = i+1) }}">{{i+1}}</a>
+    {% endfor %}
+
+  </aside>
   <ul>
     {% for music in  musics %}
     <li>

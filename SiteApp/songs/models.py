@@ -3,6 +3,8 @@ print("Version database")
 from .app import db, login_manager
 from flask_login import UserMixin
 
+MUSICS_BY_PAGES = 20
+
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username)
@@ -54,6 +56,15 @@ class Playlist(db.Model):
 
 def get_sample():
     return Music.query.all()
+
+def get_sample_for_page(page):
+    return get_sample()[(page-1)*MUSICS_BY_PAGES:page*MUSICS_BY_PAGES]
+
+def getNumberOfPages():
+    nbliste = Music.query.count()
+    if nbliste%MUSICS_BY_PAGES != 0:
+        return (nbliste//MUSICS_BY_PAGES)+1
+    return nbliste//MUSICS_BY_PAGES
 
 def get_authors():
     return Author.query.limit(10).all()

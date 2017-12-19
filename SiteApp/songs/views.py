@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists, get_playlist
+from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists, get_playlist, getNumberOfPages, get_sample_for_page
 from wtforms import StringField, HiddenField, PasswordField, widgets, SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -59,12 +59,14 @@ def home():
         title="Hello World!",
         names = ["Pierre", "Paul", "Corinne"])
 
-@app.route("/musics")
-def musics():
+@app.route("/musics/<int:page>")
+def musics(page):
     return render_template(
         "musics.html",
         title = "Les musiques",
-        musics = get_sample()
+        musics = get_sample_for_page(page),
+        numberOfPages = getNumberOfPages(),
+        page = page
     )
 
 @app.route("/authors")

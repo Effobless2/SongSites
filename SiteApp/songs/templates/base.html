@@ -24,7 +24,7 @@
        <div id="navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav">
            <li class="active"><a href="{{ url_for('home') }}">Home</a></li>
-           <li><a href="{{ url_for('musics') }}">Les Musiques</a></li>
+           <li><a href="{{ url_for('musics', page = 1) }}">Les Musiques</a></li>
            <li><a href="{{ url_for('authors') }}">Autheurs</a></li>
            <li><a href="{{ url_for('playlists') }}">Playlists</a></li>
            <li><a href="{{ url_for('new_author') }}">Ajouter un auteur</a></li>
