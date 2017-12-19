@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block main %}
+<h1>Vos auteurs</h1>
+{% for i in range(numberOfPages) %}
+<a href = "{{ url_for('authors', page = i+1) }}">{{i+1}}</a>
+{% endfor %}
+
+
 <ul>
   {% for a in authors %}
   <li><a href="{{ url_for('one_author', id= a.id ) }}">{{ a.name }}</a></li>

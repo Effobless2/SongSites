@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from hashlib import sha256
-from .models import Author, get_sample, get_authors, get_author, User, Music, get_music, Playlist, get_playlists, get_playlist, getNumberOfPages, get_sample_for_page
+from .models import Author, get_sample_for_music, get_sample_for_page_authors, get_author, User, Music, get_music, Playlist, get_playlists, get_playlist, get_number_of_pages_music, get_sample_for_page_music, get_number_of_pages_author
 from wtforms import StringField, HiddenField, PasswordField, widgets, SelectMultipleField
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -48,7 +48,7 @@ class MusicForm(FlaskForm):
 class PlaylistForm(FlaskForm):
     id = HiddenField("id")
     name = StringField("Nom de votre playlist")
-    musics = get_sample()
+    musics = get_sample_for_music()
     # musics = MultiCheckboxField("Sélectionnez vos chansons :", choices = [(x,x.__repr__) for x in base])
 
 
@@ -64,17 +64,19 @@ def musics(page):
     return render_template(
         "musics.html",
         title = "Les musiques",
-        musics = get_sample_for_page(page),
-        numberOfPages = getNumberOfPages(),
+        musics = get_sample_for_page_music(page),
+        numberOfPages = get_number_of_pages_music(),
         page = page
     )
 
-@app.route("/authors")
-def authors():
+@app.route("/authors/<int:page>")
+def authors(page):
     return render_template(
         "authors.html",
         title = "Les Autheurs",
-        authors = get_authors())
+        authors = get_sample_for_page_authors(page),
+        numberOfPages = get_number_of_pages_author(),
+        page = page)
 
 @app.route("/one-author/<int:id>")
 def one_author(id):

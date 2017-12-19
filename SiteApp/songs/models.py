@@ -4,6 +4,7 @@ from .app import db, login_manager
 from flask_login import UserMixin
 
 MUSICS_BY_PAGES = 20
+AUTHOR_BY_PAGE  = 20
 
 @login_manager.user_loader
 def load_user(username):
@@ -54,20 +55,30 @@ class Playlist(db.Model):
     def getMusicList(self):
         return self.musiclist
 
-def get_sample():
-    return Music.query.all()
 
-def get_sample_for_page(page):
-    return get_sample()[(page-1)*MUSICS_BY_PAGES:page*MUSICS_BY_PAGES]
-
-def getNumberOfPages():
+def get_number_of_pages_music():
     nbliste = Music.query.count()
     if nbliste%MUSICS_BY_PAGES != 0:
         return (nbliste//MUSICS_BY_PAGES)+1
     return nbliste//MUSICS_BY_PAGES
 
-def get_authors():
-    return Author.query.limit(10).all()
+def get_sample_for_music():
+    return Music.query.all()
+
+def get_sample_for_page_music(page):
+    return get_sample_for_music()[(page-1)*MUSICS_BY_PAGES:page*MUSICS_BY_PAGES]
+
+def get_number_of_pages_author():
+    nbliste = Author.query.count()
+    if nbliste%AUTHOR_BY_PAGE != 0:
+        return (nbliste//AUTHOR_BY_PAGE)+1
+    return nbliste//AUTHOR_BY_PAGE
+
+def get_sample_for_author():
+    return Author.query.all()
+
+def get_sample_for_page_authors(page):
+    return get_sample_for_author()[(page-1)*AUTHOR_BY_PAGE:page*AUTHOR_BY_PAGE]
 
 def get_author(id):
     return Author.query.get(id)
