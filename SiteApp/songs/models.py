@@ -63,7 +63,7 @@ def get_number_of_pages_music():
     return nbliste//MUSICS_BY_PAGES
 
 def get_sample_for_music():
-    return Music.query.all()
+    return Music.query.order_by(Music.title)
 
 def get_sample_for_page_music(page):
     return get_sample_for_music()[(page-1)*MUSICS_BY_PAGES:page*MUSICS_BY_PAGES]
@@ -75,7 +75,7 @@ def get_number_of_pages_author():
     return nbliste//AUTHOR_BY_PAGE
 
 def get_sample_for_author():
-    return Author.query.all()
+    return Author.query.order_by(Author.name)
 
 def get_sample_for_page_authors(page):
     return get_sample_for_author()[(page-1)*AUTHOR_BY_PAGE:page*AUTHOR_BY_PAGE]
